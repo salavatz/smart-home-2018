@@ -11,13 +11,16 @@ import static ru.sbt.mipt.oop.SensorEventType.*;
 public class Application {
 
     public static void main(String... args) throws IOException {
+        // считываем состояние дома из файла
         Gson gson = new Gson();
         String json = new String(Files.readAllBytes(Paths.get("smart-home-1.js")));
         SmartHome smartHome = gson.fromJson(json, SmartHome.class);
+        // начинаем цикл обработки событий
         SensorEvent event = getNextSensorEvent();
         while (event != null) {
             System.out.println("Got event: " + event);
             if (event.getType() == LIGHT_ON || event.getType() == LIGHT_OFF) {
+                // событие от источника света
                 for (Room room : smartHome.getRooms()) {
                     for (Light light : room.getLights()) {
                         if (light.getId().equals(event.getObjectId())) {
@@ -33,6 +36,7 @@ public class Application {
                 }
             }
             if (event.getType() == DOOR_OPEN || event.getType() == DOOR_CLOSED) {
+                // событие от двери
                 for (Room room : smartHome.getRooms()) {
                     for (Door door : room.getDoors()) {
                         if (door.getId().equals(event.getObjectId())) {
@@ -42,8 +46,8 @@ public class Application {
                             } else {
                                 door.setOpen(false);
                                 System.out.println("Door " + door.getId() + " in room " + room.getName() + " was closed.");
-                                // if we're leaving the hall and closing the door
-                                // then we want to turn all the lights off -- this is a smart home after all!
+                                // если мы получили событие о закрытие двери в холле - это значит, что была закрыта входная дверь.
+                                // в этом случае мы хотим автоматически выключить свет во всем доме (это же умный дом!)
                                 if (room.getName().equals("hall")) {
                                     for (Room homeRoom : smartHome.getRooms()) {
                                         for (Light light : homeRoom.getLights()) {
