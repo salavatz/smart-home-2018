@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop;
 
-public class Light {
+public class Light extends Subject{
     private boolean isOn;
     private final String id;
 

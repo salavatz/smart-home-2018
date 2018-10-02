@@ -2,7 +2,7 @@ package ru.sbt.mipt.oop;
 
 import java.util.Collection;
 
-public class Room {
+public class Room{
     private Collection<Light> lights;
     private Collection<Door> doors;
     private String name;
