@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop;
 
-public class Light extends Subject{
+public class Light implements Item{
     private boolean isOn;
     private final String id;
 
@@ -19,5 +19,11 @@ public class Light extends Subject{
 
     public void setOn(boolean on) {
         isOn = on;
+    }
+
+    @Override
+    public void executeAction(Action action, Room room) {
+        action.execute(this, room);
+
     }
 }

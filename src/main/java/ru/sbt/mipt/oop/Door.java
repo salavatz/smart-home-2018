@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop;
 
-public class Door extends Subject{
+public class Door implements Item {
     private final String id;
     private boolean isOpen;
 
@@ -15,5 +15,10 @@ public class Door extends Subject{
 
     public void setOpen(boolean open) {
         isOpen = open;
+    }
+
+    @Override
+    public void executeAction(Action action, Room room) {
+        action.execute(this, room);
     }
 }
