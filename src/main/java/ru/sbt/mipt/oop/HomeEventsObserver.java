@@ -3,32 +3,33 @@ package ru.sbt.mipt.oop;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class HomeEventsObserver implements HomeObserver {
+public class HomeEventsObserver implements HomeObserver{
 
-    private HomeEvent homeEvent;
+    private HomeEvent lastHomeEvent;
+    private final Collection<EventProcessor> eventProcessors = new ArrayList<>();
+    private SensorEventProvider sensorEventProvider;
 
-    public HomeEventsObserver(SmartHome smartHome) {
-        SensorEvent event = RandomSensorEventProvider.getNextSensorEvent();
-        Collection<EventProcessor> eventProcessors = configureEventProcessors();
-        while (event != null) {
-            System.out.println("Got event: " + event);
-            for (EventProcessor eventProcessor : eventProcessors) {
-                eventProcessor.processEvent(smartHome, event);
-            }
-            event = RandomSensorEventProvider.getNextSensorEvent();
-        }
+    public HomeEventsObserver(SensorEventProvider sensorEventProvider) {
+        this.sensorEventProvider = sensorEventProvider;
     }
 
-    private static Collection<EventProcessor> configureEventProcessors() {
-        Collection<EventProcessor> eventProcessors = new ArrayList<>();
-        eventProcessors.add(new LightsEventProcessor());
-        eventProcessors.add(new DoorEventProcessor());
-        eventProcessors.add(new HallDoorEventProcessor());
-        return eventProcessors;
+    public void registerEventProcessor(EventProcessor eventProcessor) {
+        eventProcessors.add(eventProcessor);
+    }
+
+    public void runEventsCycle(SmartHome smartHome) {
+        SensorEvent event = sensorEventProvider.getNextSensorEvent();
+        while (event != null) {
+            System.out.println("Got event: " + event);
+            for (EventProcessor eventProcessor: eventProcessors) {
+                eventProcessor.processEvent(smartHome, event);
+            }
+            event = sensorEventProvider.getNextSensorEvent();
+        }
     }
 
     @Override
     public void handleEvent(HomeEvent event) {
-        homeEvent = event;
+        lastHomeEvent = event;
     }
 }

@@ -4,14 +4,13 @@ package ru.sbt.mipt.oop;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static ru.sbt.mipt.oop.HomeEvent.LIGHT_OFF_IN_HOUSE;
 import static ru.sbt.mipt.oop.HomeEvent.ROOM_ADDED;
 
 public class SmartHome implements Item, HomeObservable {
     Collection<Room> rooms;
-    List<HomeObserver> observers = new ArrayList<>();
+    private Collection<HomeObserver> observers = new ArrayList<>();
 
     public SmartHome() {
         rooms = new ArrayList<>();
@@ -24,14 +23,13 @@ public class SmartHome implements Item, HomeObservable {
     public void addEventsObserver(HomeObserver homeObserver) {
         observers.add(homeObserver);
     }
-    public void removeEventsObserver(HomeObserver homeObserver) {
-        observers.remove(homeObserver);
-    }
+
     public void notifyObservers(HomeEvent event) {
         for (HomeObserver homeObserver : observers) {
             homeObserver.handleEvent(event);
         }
     }
+
     public void addRoom(Room room) {
         notifyObservers(ROOM_ADDED);
         rooms.add(room);
