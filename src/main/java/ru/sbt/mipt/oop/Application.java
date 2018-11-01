@@ -15,9 +15,10 @@ public class Application {
     public static void main(String... args) throws IOException {
         SmartHome smartHome = smartHomeLoader.looadSmartHome();
         smartHome.addEventsObserver(homeEventsObserver);
-        homeEventsObserver.registerEventProcessor(new LightsEventProcessor());
-        homeEventsObserver.registerEventProcessor(new DoorEventProcessor());
-        homeEventsObserver.registerEventProcessor(new HallDoorEventProcessor());
+        homeEventsObserver.registerEventProcessor(new DecoratorForEventProcessors(new LightsEventProcessor()));
+        homeEventsObserver.registerEventProcessor(new DecoratorForEventProcessors(new DoorEventProcessor()));
+        homeEventsObserver.registerEventProcessor(new DecoratorForEventProcessors(new HallDoorEventProcessor()));
+        homeEventsObserver.registerEventProcessor(new AlarmEventProcessor());
         homeEventsObserver.runEventsCycle(smartHome);
     }
 

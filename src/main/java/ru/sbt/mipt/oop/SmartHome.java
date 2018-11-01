@@ -9,10 +9,12 @@ import static ru.sbt.mipt.oop.HomeEvent.LIGHT_OFF_IN_HOUSE;
 import static ru.sbt.mipt.oop.HomeEvent.ROOM_ADDED;
 
 public class SmartHome implements Item, HomeObservable {
+    private Alarm alarm;
     Collection<Room> rooms;
     private Collection<HomeObserver> observers = new ArrayList<>();
 
     public SmartHome() {
+        alarm = new Alarm();
         rooms = new ArrayList<>();
     }
 
@@ -37,6 +39,10 @@ public class SmartHome implements Item, HomeObservable {
 
     public Collection<Room> getRooms() {
         return rooms;
+    }
+
+    public Alarm getAlarm() {
+        return alarm;
     }
 
     public void turnOffLights() {
