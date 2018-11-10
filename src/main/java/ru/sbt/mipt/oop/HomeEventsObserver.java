@@ -3,7 +3,7 @@ package ru.sbt.mipt.oop;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class HomeEventsObserver implements HomeObserver{
+public class HomeEventsObserver implements HomeObserver, EventsManager{
 
     private HomeEvent lastHomeEvent;
     private final Collection<EventProcessor> eventProcessors = new ArrayList<>();
@@ -13,10 +13,12 @@ public class HomeEventsObserver implements HomeObserver{
         this.sensorEventProvider = sensorEventProvider;
     }
 
+    @Override
     public void registerEventProcessor(EventProcessor eventProcessor) {
         eventProcessors.add(eventProcessor);
     }
 
+    @Override
     public void runEventsCycle(SmartHome smartHome) {
         SensorEvent event = sensorEventProvider.getNextSensorEvent();
         while (event != null) {
