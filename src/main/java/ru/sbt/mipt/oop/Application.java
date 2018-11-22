@@ -34,6 +34,10 @@ public class Application {
         homeEventsObserver.registerEventProcessor(new AlarmEventProcessor());
         homeEventsObserver.runEventsCycle(smartHome);
         */
+        RemoteControlRegistry remoteControlRegistry = context.getBean(RemoteControlRegistry.class);
+        SmartHomeRemoteControl smartHomeRemoteControl = context.getBean(SmartHomeRemoteControl.class);
+        remoteControlRegistry.registerRemoteControl(smartHomeRemoteControl, "1");
+
         eventsManager.registerEventProcessor(new DecoratorForEventProcessors(new LightsEventProcessor()));
         eventsManager.registerEventProcessor(new DecoratorForEventProcessors(new DoorEventProcessor()));
         eventsManager.registerEventProcessor(new DecoratorForEventProcessors(new HallDoorEventProcessor()));

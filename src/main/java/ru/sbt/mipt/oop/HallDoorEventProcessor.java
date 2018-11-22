@@ -12,7 +12,7 @@ public class HallDoorEventProcessor implements EventProcessor {
                     // если мы получили событие о закрытие двери в холле - это значит, что была закрыта входная дверь.
                     // в этом случае мы хотим автоматически выключить свет во всем доме (это же умный дом!)
                     if(room.getName().equals("hall")) {
-                        smartHome.turnOffLights();
+                        smartHome.turnOffOrOnLights(true);
                     }
                 }
             }

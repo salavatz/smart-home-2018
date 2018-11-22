@@ -45,12 +45,19 @@ public class SmartHome implements Item, HomeObservable {
         return alarm;
     }
 
-    public void turnOffLights() {
+    public void turnOffOrOnLights(boolean isTurnOff) {//true - turn off
         notifyObservers(LIGHT_OFF_IN_HOUSE);
         for (Room homeRoom: getRooms()) {
             for (Light light : homeRoom.getLights()) {
-                light.setOn(false);
-                SensorCommand command = new SensorCommand(CommandType.LIGHT_OFF, light.getId());
+                SensorCommand command;
+                if (isTurnOff) {
+                    light.setOn(false);
+                    command = new SensorCommand(CommandType.LIGHT_OFF, light.getId());
+                }
+                else {
+                    light.setOn(true);
+                    command = new SensorCommand(CommandType.LIGHT_ON, light.getId());
+                }
                 SensorCommandExecutor.executeCommand(command);
             }
         }
